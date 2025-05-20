@@ -21,7 +21,7 @@ interface sync_completed_response{
     syncErr: string;
 }
 
-function LoginForm(props: {login_url: string, domain: string}){
+export function LoginForm(props: {login_url: string, domain: string}){
 
     const navigate = useNavigate()
 
@@ -84,7 +84,7 @@ function LoginForm(props: {login_url: string, domain: string}){
     );
 }
 
-function LoginHandler(props: {login_url: string, domain: string}){
+export function LoginHandler(props: {login_url: string, domain: string}){
 
     const navigate = useNavigate()
 
@@ -106,5 +106,3 @@ function LoginHandler(props: {login_url: string, domain: string}){
         </div>
     );
 }
-
-export default LoginHandler;

@@ -14,6 +14,10 @@ interface domain_id_response{
 
 function WordList(props: {words: word[], domain: string, reloadFunc?:() => void}){
 
+    /**
+     * The Login code needs to be generalized and refactored, but this will do for now as the SpellinBlox server requires a login to have data pushed to it
+     */
+
     const navigate = useNavigate()
 
     const [errorText, setErrorText] = useState("");
@@ -24,6 +28,13 @@ function WordList(props: {words: word[], domain: string, reloadFunc?:() => void}
     const [tagId, setTagId] = useState(-1);
     const [tagText, setTagText] = useState("");
     const [domainId, setDomainId] = useState(-1);
+    const [syncMode, setSyncMode] = useState(false);
+
+    // ---- Login specific stuff -----
+    const [username, setUsername] = useState("");
+    const [password, setPassword] = useState("");
+
+    const [error, setError] = useState(''); // Login error handling
 
 
 
@@ -218,6 +229,30 @@ function WordList(props: {words: word[], domain: string, reloadFunc?:() => void}
         }
     }
 
+    function performSync(){
+        if(username.length > 0 && password.length > 0){
+            doFetch<any>({
+                url: "/push_data",
+                method: "POST",
+                data: {
+                    'username': username,
+                    'password': password,
+                    'domain': props.domain
+                }
+            }).catch((err) => {})
+        }
+    }
+
+    function syncDialogKeyUpHandler(event: React.KeyboardEvent){
+        event.preventDefault();
+        if(event.key == "Enter"){
+            performSync();
+            setUsername("");
+            setPassword("");
+            
+        }
+    }
+
     function logout(e: React.MouseEvent){
         doFetch<auth_interface>({
             url: "/logout",
@@ -233,7 +268,9 @@ function WordList(props: {words: word[], domain: string, reloadFunc?:() => void}
 
     return (
         <div>
-            <Button className="logoutButton" onClick={logout}>Log Out</Button>
+            <Button className="logoutButton left" onClick={logout}>Log Out</Button>
+            {error && <p className="error">{error}</p>}
+            <Button className="syncButton right" onClick={performSync}>Push to SpellinBlox</Button>
             {errorText.length > 0? <p className="error">{errorText}</p> : <></>}
             <h3>Words</h3>
             <Button onClick={makeNewRow} variant="contained">Add Word</Button>
@@ -257,6 +294,28 @@ function WordList(props: {words: word[], domain: string, reloadFunc?:() => void}
                         />
                     </form>
                 </Box>
+            </Modal>
+            <Modal className="modal" onKeyUp={syncDialogKeyUpHandler} open={syncMode} onClose={close}>
+                <div className="loginDiv">
+                    <form className="loginForm" onSubmit={()=>{performSync(); setUsername(""); setPassword("")}}>
+                        <label className="formLabel">Username:</label><input 
+                            value={username} 
+                            onChange={e => setUsername(e.target.value)}
+                            placeholder="Username"
+                            required
+                        />
+                        <br/>
+                        <label className="formLabel">Password:</label><input
+                            type="password"
+                            value={password}
+                            onChange={e => setPassword(e.target.value)}
+                            placeholder="Password"
+                            required
+                        />
+                        <br/>
+                        <Button id="loginSubmitButton" type="submit" variant="contained">Login</Button>
+                    </form>
+                </div>
             </Modal>
             <GenericDataGrid<word> columns={colDefs} data={props.words} />
         </div>

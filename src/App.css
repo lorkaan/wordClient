@@ -85,3 +85,15 @@
   width: 75%;
   height: 50%;
 }
+
+.left{
+  float: left;
+}
+
+.right{
+  float: right;
+}
+
+.logoutButton{
+  background-color: red;
+}
