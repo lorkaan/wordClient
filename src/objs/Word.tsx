@@ -1,11 +1,12 @@
 import { GridColDef } from "@mui/x-data-grid";
-import { create_update_response, delete_response, word } from "../interfaces/wordtags";
+import { auth_interface, create_update_response, delete_response, word } from "../interfaces/wordtags";
 import { GenericDataGrid } from "../generics/GenericDataGrid";
 import { DataDisplay } from "../generics/DataDisplay";
 import { useState } from "react";
 import { Box, Button, Dialog, Modal, TextField } from "@mui/material";
 import { doFetch } from "../utils/secureFetch";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import { useSingleDataModel } from "../utils/dataFetch";
 
 interface domain_id_response{
     domain_id: number;
@@ -217,9 +218,10 @@ function WordList(props: {words: word[], domain: string, reloadFunc?:() => void}
 
     return (
         <div>
+            <Button className="logoutButton">Log Out</Button>
             {errorText.length > 0? <p className="error">{errorText}</p> : <></>}
             <h3>Words</h3>
-            <button onClick={makeNewRow}>Add Word</button>
+            <Button onClick={makeNewRow} variant="contained">Add Word</Button>
             <Modal className="modal" onKeyUp={dialogKeyUpHandler} open={editMode} onClose={close}>
                 <Box>
                     <form onSubmit={close}>
@@ -247,6 +249,14 @@ function WordList(props: {words: word[], domain: string, reloadFunc?:() => void}
 }
 
 export function Words(props: {url: string, domain: string}){
+
+    const navigate = useNavigate()
+
+    const {data, loading, error} = useSingleDataModel<auth_interface>("/is_auth");
+
+    if(!loading && !error && (data == null || !data.auth)){
+        navigate("/");
+    }
 
     return (
         <DataDisplay<word> data_url={props.url} renderFunc={

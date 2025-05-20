@@ -11,6 +11,28 @@ const DataModel = {
     }
 }
 
+export const useSingleDataModel = <T>(url:string) =>{
+    const [data, setData] = useState<T|null>(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
+
+    useEffect(() =>{
+        const loadData = async () =>{
+            try{
+                const data: T | null = await DataModel.fetchData(url);
+                setData(data);
+            }catch(err){
+                setError("Error: " + err);
+            }finally{
+                setLoading(false);
+            }
+        };
+        loadData()
+    }, []);
+
+    return {data, loading, error}
+}
+
 export const useDataListModel = <T>(url: string, reload_trigger: boolean = false) =>{
     const [data, setData] = useState<T[]>([]);
     const [loading, setLoading] = useState(true);

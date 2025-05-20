@@ -30,3 +30,7 @@ export interface delete_response{
     error?: string;
 }
 
+export interface auth_interface{
+    auth: boolean;
+}
+

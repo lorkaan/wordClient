@@ -1,6 +1,9 @@
 import { useState } from "react";
 import { doFetch } from "../utils/secureFetch";
 import { useNavigate } from "react-router-dom";
+import { Button } from "@mui/material";
+import { DataDisplay } from "../generics/DataDisplay";
+import { useSingleDataModel } from "../utils/dataFetch";
 
 /**
  * 
@@ -74,11 +77,34 @@ function LoginForm(props: {login_url: string, domain: string}){
                     required
                 />
                 <br/>
-                <button id="loginSubmitButton" type="submit">Login</button>
+                <Button id="loginSubmitButton" type="submit" variant="contained">Login</Button>
                 {error && <p className="error">{error}</p>}
             </form>
         </div>
     );
 }
 
-export default LoginForm;
+function LoginHandler(props: {login_url: string, domain: string}){
+
+    const navigate = useNavigate()
+
+    const {data, loading, error} = useSingleDataModel<auth_interface>("/is_auth");
+
+    if(!loading && !error && data != null && data.auth){
+        navigate("/words");
+    }
+    
+    return (
+        <div>
+            {loading && <p>Loading...</p>}
+            {error && <p className="error">Error: {error}</p>}
+            {!loading && !error && (data == null || !data.auth)? 
+                    <LoginForm login_url={props.login_url} domain={props.domain} />
+                :
+                    <p>Redirecting to Word Collection, click <a href="/words">here</a> to redirect immediately</p>
+            }
+        </div>
+    );
+}
+
+export default LoginHandler;

@@ -1,13 +1,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
-import App from './App';
+//import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import { Tags } from './objs/Tag';
+//import { Tags } from './objs/Tag';
 import { Words } from './objs/Word';
-import LoginForm from './forms/LoginForm';
 import './App.css';
+import LoginHandler from './forms/LoginForm';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -19,7 +19,7 @@ const domain: string = "https://www-spellinblox-info.filesusr.com/";
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <LoginForm login_url="login" domain={domain}/>
+    element: <LoginHandler login_url="login" domain={domain}/>
   },
   /* Depreciated as Words does it though a single interface since tags should not exist without words to save space and words cant exist without tags
   {
