@@ -5,7 +5,7 @@ function App() {
 
   return (
     <div>
-      <LoginForm login_url=""/>
+      <LoginForm login_url="login"/>
     </div>
   );
 }

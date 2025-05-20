@@ -18,11 +18,11 @@ const router = createBrowserRouter([
   },
   {
     path: "/tags",
-    element: <Tags url="" />
+    element: <Tags url="api/tags" />
   },
   {
     path: "/words",
-    element: <Words url="" />
+    element: <Words url="api/words" />
   }
 ]);
 
