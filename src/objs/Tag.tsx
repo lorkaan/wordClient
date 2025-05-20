@@ -58,6 +58,15 @@ function TagList(props: {tags: tag[], reloadFunc?: ()=> void}){
         setNewTagText("")
     }
 
+    function dialogKeyUpHandler(event: React.KeyboardEvent){
+        event.preventDefault();
+        if(event.key == "Enter"){
+            if(!event.shiftKey){
+                close();
+            }
+        }
+    }
+
     const colDefs: GridColDef[] = [
         {
             field: "text",
@@ -73,7 +82,7 @@ function TagList(props: {tags: tag[], reloadFunc?: ()=> void}){
             {errorText.length > 0? <p className="error">{errorText}</p> : <></>}
             <h3>Tags</h3>
             <button onClick={toggleEditMode}>Add Tag</button>
-            <Dialog maxWidth="md" open={editMode} onClose={close}>
+            <Dialog onKeyUp={dialogKeyUpHandler} maxWidth="md" open={editMode} onClose={close}>
                 <form onSubmit={close}>
                     <input 
                         value={newTagText} 

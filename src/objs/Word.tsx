@@ -23,6 +23,7 @@ function WordList(props: {words: word[], reloadFunc?:() => void}){
     const [editMode, setEditMode] = useState(false);
     const [newWordText, setNewWordText] = useState("");
     const [newWordDetails, setNewWordDetails] = useState("");
+    const [wordId, setWordId] = useState(-1);
 
     function toggleEditMode(){
         setEditMode(!editMode);
@@ -30,8 +31,8 @@ function WordList(props: {words: word[], reloadFunc?:() => void}){
 
     function addWord(newWordText: string, newWordDetails: string){
         doFetch<create_update_response>({
-            url: "/api/words",
-            method: "POST",
+            url: wordId > 0? "/api/words/" + wordId: "/api/words",
+            method: wordId > 0? "PUT": "POST",
             data: {"text": newWordText, "details": newWordDetails}
         }).then((resp: create_update_response | void)=>{
             if(resp){
@@ -60,7 +61,7 @@ function WordList(props: {words: word[], reloadFunc?:() => void}){
     }
 
     function removeWord(row: any){
-        doFetch<delete_ok_response| delete_no_response>({
+        doFetch<delete_response>({
             url: "/api/words/" + row.id,
             method: "DELETE"
         }).then((resp: delete_response | void)=>{
@@ -87,6 +88,18 @@ function WordList(props: {words: word[], reloadFunc?:() => void}){
         });
     }
 
+    function makeNewRow(){
+        setWordId(-1);
+        toggleEditMode();
+    }
+
+    function updateRow(row: any){
+        setWordId(row.id);
+        setNewWordText(row.text);
+        setNewWordDetails(row.details);
+        toggleEditMode();
+    }
+
     const colDefs: GridColDef[] = [
         {
             field: "text",
@@ -100,7 +113,10 @@ function WordList(props: {words: word[], reloadFunc?:() => void}){
             headerName: "Description",
             align: "center", 
             headerAlign: "center", 
-            width: 100,
+            width: 500,
+            renderCell: (params) => {
+                return (<span onClick={updateRow}>{params.row.details}</span>)
+            }
         },
         {
             field: "delete",
@@ -114,12 +130,21 @@ function WordList(props: {words: word[], reloadFunc?:() => void}){
         }
     ];
 
+    function dialogKeyUpHandler(event: React.KeyboardEvent){
+        event.preventDefault();
+        if(event.key == "Enter"){
+            if(!event.shiftKey){
+                close();
+            }
+        }
+    }
+
     return (
         <div>
             {errorText.length > 0? <p className="error">{errorText}</p> : <></>}
             <h3>Words</h3>
-            <button onClick={toggleEditMode}>Add Word</button>
-            <Dialog maxWidth="md" open={editMode} onClose={close}>
+            <button onClick={makeNewRow}>Add Word</button>
+            <Dialog onKeyUp={dialogKeyUpHandler} maxWidth="md" open={editMode} onClose={close}>
                 <form onSubmit={close}>
                     <label className="formLabel">Word:</label><input 
                         value={newWordText} 
