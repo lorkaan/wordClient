@@ -80,3 +80,8 @@
   padding:5%;
   margin: 4%;
 }
+
+.modal textarea{
+  width: 75%;
+  height: 50%;
+}

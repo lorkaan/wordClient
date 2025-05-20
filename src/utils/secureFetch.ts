@@ -33,7 +33,7 @@ function createGetURL(request: RequestData){
  * @returns                 {Promise}       A Promise containing the interface T specified
  */
 export function doFetch<T>(request: RequestData, transformFunc?: (jsonObj: Record<any, any>) => T): Promise<void | T>{
-    if(request.method == "POST"){
+    if(request.method in ["POST", "PUT", "DELETE"]){
         return getCsrfToken()
         .then(function(csrf_token){
             if(typeof(csrf_token) == 'string'){
