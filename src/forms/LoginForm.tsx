@@ -2,8 +2,8 @@ import { useState } from "react";
 import { doFetch } from "../utils/secureFetch";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@mui/material";
-import { DataDisplay } from "../generics/DataDisplay";
 import { useSingleDataModel } from "../utils/dataFetch";
+import { auth_interface } from "../interfaces/wordtags";
 
 /**
  * 
