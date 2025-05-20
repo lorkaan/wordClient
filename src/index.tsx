@@ -6,17 +6,19 @@ import reportWebVitals from './reportWebVitals';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { Tags } from './objs/Tag';
 import { Words } from './objs/Word';
+import LoginForm from './forms/LoginForm';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
 
+// This is here to lock the testing into data that belongs to a safe test domain.
 const domain: string = "https://www-spellinblox-info.filesusr.com/";
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <App domain={domain}/>
+    element: <LoginForm login_url="login" domain={domain}/>
   },
   {
     path: "/tags",
