@@ -45,7 +45,7 @@ function LoginForm(props: {login_url: string}){
             if(syncResponse){
                 if(syncResponse.syncCompleted){
                     // Sync is completed correctly
-                    navigate("/words");
+                    navigate("/words/" + domain);
                 }else{
                     // Sync is a problem
                     setError("Sync Failed: " + syncResponse.syncErr);

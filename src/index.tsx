@@ -21,7 +21,7 @@ const router = createBrowserRouter([
     element: <Tags url="api/tags" />
   },
   {
-    path: "/words",
+    path: "/words/:domain",
     element: <Words url="api/words" />
   }
 ]);

@@ -5,6 +5,7 @@ import { DataDisplay } from "../generics/DataDisplay";
 import { useState } from "react";
 import { Box, Button, Dialog, Modal, TextField } from "@mui/material";
 import { doFetch } from "../utils/secureFetch";
+import { useParams } from "react-router-dom";
 
 
 function Word(props: word){
@@ -17,7 +18,7 @@ function Word(props: word){
     );
 }
 
-function WordList(props: {words: word[], reloadFunc?:() => void}){
+function WordList(props: {words: word[], domain: string, reloadFunc?:() => void}){
 
     const [errorText, setErrorText] = useState("");
     const [editMode, setEditMode] = useState(false);
@@ -26,17 +27,19 @@ function WordList(props: {words: word[], reloadFunc?:() => void}){
     const [wordId, setWordId] = useState(-1);
     const [tagId, setTagId] = useState(-1);
     const [tagText, setTagText] = useState("");
+    const [domainId, setDomainId] = useState(-1);
+
+
 
     function toggleEditMode(){
         setEditMode(!editMode);
     }
 
-    function addTagIfNeeded(): Promise<number | undefined>{
-        if(tagId <= 0){
+    function getDomainIdIfNeeded(): Promise<number | undefined>{
+        if(domainId <= 0){
             return doFetch<create_update_response>({
-                url: "/api/tags/",
-                method: "POST",
-                data: {"text": tagText}
+                url: "api/domains/" + props.domain,
+                method: "GET"
             }).then((resp: create_update_response | void) =>{
                 if(resp){
                     if(resp.id){
@@ -51,6 +54,44 @@ function WordList(props: {words: word[], reloadFunc?:() => void}){
                 }else{
                     setErrorText("Network Error: Unable to create tag: " + tagText)
                 }
+            }).then((domain_id: number | undefined) =>{
+                if(domain_id){
+                    setDomainId(domain_id);
+                }
+                return domain_id;
+            });
+        }else{
+            return new Promise(resolve => resolve(domainId));
+        }
+    }
+
+    function addTagIfNeeded(): Promise<number | undefined>{
+        if(tagId <= 0){
+            return getDomainIdIfNeeded().then((domain_id) =>{
+                return doFetch<create_update_response>({
+                    url: "/api/tags/",
+                    method: "POST",
+                    data: {"text": tagText, "domain_id": domain_id}
+                }).then((resp: create_update_response | void) =>{
+                    if(resp){
+                        if(resp.id){
+                            if(typeof(resp.id) == 'string'){
+                                return Number.parseInt(resp.id);
+                            }else{
+                                return resp.id;
+                            }
+                        }else{
+                            setErrorText("Create Failed: " + resp.name)
+                        }
+                    }else{
+                        setErrorText("Network Error: Unable to create tag: " + tagText)
+                    }
+                }).then((tag_id: number | undefined) =>{
+                    if(tag_id){
+                        setTagId(tag_id);
+                    }
+                    return tag_id;
+                });
             });
         }else{
             return new Promise(resolve => resolve(tagId));
@@ -217,10 +258,12 @@ function WordList(props: {words: word[], reloadFunc?:() => void}){
 
 export function Words(props: {url: string}){
 
+    const {domain} = useParams();
+
     return (
         <DataDisplay<word> data_url={props.url} renderFunc={
             (data, reloadFunc) =>{
-                return (<WordList words={data} reloadFunc={reloadFunc}/>);
+                return (<WordList words={data} domain={domain? domain: ""} reloadFunc={reloadFunc}/>);
             }
         } />
     );
