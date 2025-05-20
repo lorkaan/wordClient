@@ -19,7 +19,7 @@ export function DataDisplay<T>(props: {data_url: string, renderFunc: DataListRen
             {loading && <p>Loading...</p>}
             {error && <p className="error">Error: {error}</p>}
             {!loading && !error? 
-                props.renderFunc(data):
+                props.renderFunc(data, triggerDataFetch):
                 <p>No Data Found</p>
             }
         </div>

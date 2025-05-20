@@ -14,3 +14,9 @@ export interface tag extends identifiableText{
 export interface word extends identifiableText{
     details?: string;
 }
+
+// ----- Response Interfaces -----
+
+export interface create_response{
+    name: string | string[];
+}
