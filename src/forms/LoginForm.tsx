@@ -16,6 +16,7 @@ const domain: string = "https://www-spellinblox-info.filesusr.com/";
 
 interface sync_completed_response{
     syncCompleted: boolean;
+    syncErr: string;
 }
 
 function LoginForm(props: {login_url: string}){
@@ -44,14 +45,14 @@ function LoginForm(props: {login_url: string}){
             if(syncResponse){
                 if(syncResponse.syncCompleted){
                     // Sync is completed correctly
-                    navigate("api/words")
+                    navigate("api/words");
                 }else{
                     // Sync is a problem
-                    setError("Sync Failed")
+                    setError("Sync Failed: " + syncResponse.syncErr);
                 }
             }else{
                 // Sync did not happen and nothing was returned, something is really wrong on the server side
-                setError("Server Fail")
+                setError("Server Fail");
             }
         })
     }
