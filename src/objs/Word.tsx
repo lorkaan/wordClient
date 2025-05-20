@@ -3,7 +3,7 @@ import { create_update_response, delete_response, word } from "../interfaces/wor
 import { GenericDataGrid } from "../generics/GenericDataGrid";
 import { DataDisplay } from "../generics/DataDisplay";
 import { useState } from "react";
-import { Button, Dialog, TextField } from "@mui/material";
+import { Box, Button, Dialog, Modal, TextField } from "@mui/material";
 import { doFetch } from "../utils/secureFetch";
 
 
@@ -148,20 +148,22 @@ function WordList(props: {words: word[], reloadFunc?:() => void}){
             {errorText.length > 0? <p className="error">{errorText}</p> : <></>}
             <h3>Words</h3>
             <button onClick={makeNewRow}>Add Word</button>
-            <Dialog onKeyUp={dialogKeyUpHandler} maxWidth="md" open={editMode} onClose={close}>
-                <form onSubmit={close}>
-                    <label className="formLabel">Word:</label><input 
-                        value={newWordText} 
-                        onChange={e => setNewWordText(e.target.value)}
-                        placeholder="New Word"
-                    /><br/>
-                    <label className="formLabel">Details:</label><textarea 
-                        value={newWordDetails} 
-                        onChange={e => setNewWordDetails(e.target.value)}
-                        placeholder="New Word"
-                    />
-                </form>
-            </Dialog>
+            <Modal onKeyUp={dialogKeyUpHandler} open={editMode} onClose={close}>
+                <Box>
+                    <form onSubmit={close}>
+                        <label className="formLabel">Word:</label><input 
+                            value={newWordText} 
+                            onChange={e => setNewWordText(e.target.value)}
+                            placeholder="New Word"
+                        /><br/>
+                        <label className="formLabel">Details:</label><textarea 
+                            value={newWordDetails} 
+                            onChange={e => setNewWordDetails(e.target.value)}
+                            placeholder="New Word"
+                        />
+                    </form>
+                </Box>
+            </Modal>
             <GenericDataGrid<word> columns={colDefs} data={props.words} />
         </div>
     );

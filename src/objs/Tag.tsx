@@ -3,7 +3,7 @@ import { GenericDataGrid } from "../generics/GenericDataGrid";
 import { GridColDef } from "@mui/x-data-grid";
 import { DataDisplay } from "../generics/DataDisplay";
 import { useState } from "react";
-import { Dialog } from "@mui/material";
+import { Dialog, Modal } from "@mui/material";
 import { doFetch } from "../utils/secureFetch";
 
 const tag_url: string = "";
@@ -82,7 +82,7 @@ function TagList(props: {tags: tag[], reloadFunc?: ()=> void}){
             {errorText.length > 0? <p className="error">{errorText}</p> : <></>}
             <h3>Tags</h3>
             <button onClick={toggleEditMode}>Add Tag</button>
-            <Dialog onKeyUp={dialogKeyUpHandler} maxWidth="md" open={editMode} onClose={close}>
+            <Modal onKeyUp={dialogKeyUpHandler} open={editMode} onClose={close}>
                 <form onSubmit={close}>
                     <input 
                         value={newTagText} 
@@ -90,7 +90,7 @@ function TagList(props: {tags: tag[], reloadFunc?: ()=> void}){
                         placeholder="New Tag"
                     />
                 </form>
-            </Dialog>
+            </Modal>
             <GenericDataGrid<tag> columns={colDefs} data={props.tags} />
         </div>
     );
