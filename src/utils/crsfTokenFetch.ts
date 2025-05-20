@@ -31,10 +31,10 @@ function setCookie(key: string, value: string){
     document.cookie = document + regex.cookie_seperator + tmp_str;
 }
 
-const token_url = "crsf-token";
-const token_response_key = "crsfToken";
+const token_url = "csrf-token";
+const token_response_key = "csrfToken";
 
-export function getCrsfToken(){
+export function getCsrfToken(){
     let crsf_token = getCookies(cookie_key.csrf_token);
     if(!(typeof(crsf_token) == 'string' && crsf_token.length > 0)){
         return fetch(token_url, {

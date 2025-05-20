@@ -1,4 +1,4 @@
-import { getCrsfToken } from "./crsfTokenFetch";
+import { getCsrfToken } from "./crsfTokenFetch";
 
 interface RequestData{
     url: string;
@@ -34,9 +34,9 @@ function createGetURL(request: RequestData){
  */
 export function doFetch<T>(request: RequestData, transformFunc?: (jsonObj: Record<any, any>) => T): Promise<void | T>{
     if(request.method == "POST"){
-        return getCrsfToken()
-        .then(function(crsf_token){
-            if(typeof(crsf_token) == 'string'){
+        return getCsrfToken()
+        .then(function(csrf_token){
+            if(typeof(csrf_token) == 'string'){
                 return fetch(request.url, {
                     method: request.method,
                     mode: "cors",
@@ -44,12 +44,12 @@ export function doFetch<T>(request: RequestData, transformFunc?: (jsonObj: Recor
                     credentials: "same-origin",
                     headers : {
                         'Content-Type': 'application/json',
-                        'X-CSRFToken': crsf_token
+                        'X-CSRFToken': csrf_token
                     },
                     body: JSON.stringify(request.data)
                 });
             }else{
-                throw new TypeError("Expected a string for CRSF Token but got: " + typeof(crsf_token) +  " instead");
+                throw new TypeError("Expected a string for CRSF Token but got: " + typeof(csrf_token) +  " instead");
             }
         })
         .then(function (response) {
