@@ -3,7 +3,7 @@ import { create_update_response, delete_response, word } from "../interfaces/wor
 import { GenericDataGrid } from "../generics/GenericDataGrid";
 import { DataDisplay } from "../generics/DataDisplay";
 import { useState } from "react";
-import { Button, Dialog } from "@mui/material";
+import { Button, Dialog, TextField } from "@mui/material";
 import { doFetch } from "../utils/secureFetch";
 
 
@@ -31,7 +31,7 @@ function WordList(props: {words: word[], reloadFunc?:() => void}){
 
     function addWord(newWordText: string, newWordDetails: string){
         doFetch<create_update_response>({
-            url: wordId > 0? "/api/words/" + wordId: "/api/words",
+            url: wordId > 0? "/api/words/" + wordId: "/api/words/",
             method: wordId > 0? "PUT": "POST",
             data: {"text": newWordText, "details": newWordDetails}
         }).then((resp: create_update_response | void)=>{
@@ -94,6 +94,10 @@ function WordList(props: {words: word[], reloadFunc?:() => void}){
     }
 
     function updateRow(row: any){
+        console.log(row.id);
+        console.log(row.text);
+        console.log(row.details);
+        console.log(row);
         setWordId(row.id);
         setNewWordText(row.text);
         setNewWordDetails(row.details);
@@ -115,7 +119,7 @@ function WordList(props: {words: word[], reloadFunc?:() => void}){
             headerAlign: "center", 
             width: 500,
             renderCell: (params) => {
-                return (<span onClick={updateRow}>{params.row.details}</span>)
+                return (<TextField onClick={updateRow}>{params.row.details}</TextField>)
             }
         },
         {

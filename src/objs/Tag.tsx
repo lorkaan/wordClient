@@ -30,7 +30,7 @@ function TagList(props: {tags: tag[], reloadFunc?: ()=> void}){
 
     function addTag(text: string){
         doFetch<create_update_response>({
-            url: "/api/tags",
+            url: "/api/tags/",
             method: "POST",
             data: {"text": text}
         }).then((resp: create_update_response | void)=>{
