@@ -12,14 +12,13 @@ import { useNavigate } from "react-router-dom";
  * 
  * The rest of the system is set up to handle multiple domains, so locking it here will limit the scope to test data.
  */
-const domain: string = "https://www-spellinblox-info.filesusr.com/";
 
 interface sync_completed_response{
     syncCompleted: boolean;
     syncErr: string;
 }
 
-function LoginForm(props: {login_url: string}){
+function LoginForm(props: {login_url: string, domain: string}){
 
     const navigate = useNavigate()
 
@@ -36,7 +35,7 @@ function LoginForm(props: {login_url: string}){
             data: {
                 'username': username,
                 'password': password,
-                'domain': domain
+                'domain': props.domain
             }
         }).catch((err) => {
             console.error('Login & Sync failed:', err);
@@ -45,7 +44,7 @@ function LoginForm(props: {login_url: string}){
             if(syncResponse){
                 if(syncResponse.syncCompleted){
                     // Sync is completed correctly
-                    navigate("/words/" + domain);
+                    navigate("/words");
                 }else{
                     // Sync is a problem
                     setError("Sync Failed: " + syncResponse.syncErr);

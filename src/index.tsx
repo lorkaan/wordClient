@@ -11,18 +11,20 @@ const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
 
+const domain: string = "https://www-spellinblox-info.filesusr.com/";
+
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <App/>
+    element: <App domain={domain}/>
   },
   {
     path: "/tags",
     element: <Tags url="api/tags" />
   },
   {
-    path: "/words/:domain",
-    element: <Words url="api/words" />
+    path: "/words",
+    element: <Words url="api/words" domain={domain}/>
   }
 ]);
 

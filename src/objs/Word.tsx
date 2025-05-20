@@ -7,15 +7,8 @@ import { Box, Button, Dialog, Modal, TextField } from "@mui/material";
 import { doFetch } from "../utils/secureFetch";
 import { useParams } from "react-router-dom";
 
-
-function Word(props: word){
-    return (
-        <div>
-            <span>{props.id}</span>
-            <span>{props.text}</span>
-            <span>{props.details? props.details: "N/A"}</span>
-        </div>
-    );
+interface domain_id_response{
+    domain_id: number;
 }
 
 function WordList(props: {words: word[], domain: string, reloadFunc?:() => void}){
@@ -37,19 +30,16 @@ function WordList(props: {words: word[], domain: string, reloadFunc?:() => void}
 
     function getDomainIdIfNeeded(): Promise<number | undefined>{
         if(domainId <= 0){
-            return doFetch<create_update_response>({
-                url: "api/domains/" + props.domain,
-                method: "GET"
-            }).then((resp: create_update_response | void) =>{
+            return doFetch<domain_id_response>({
+                url: "get_domain_id/",
+                method: "POST",
+                data: {"domain": props.domain}
+            }).then((resp: domain_id_response | void) =>{
                 if(resp){
-                    if(resp.id){
-                        if(typeof(resp.id) == 'string'){
-                            return Number.parseInt(resp.id);
-                        }else{
-                            return resp.id;
-                        }
+                    if(resp.domain_id && resp.domain_id > 0){
+                        return resp.domain_id;
                     }else{
-                        setErrorText("Create Failed: " + resp.name)
+                        setErrorText("Fatal Error: Retrived an unauthorized Domain")
                     }
                 }else{
                     setErrorText("Network Error: Unable to create tag: " + tagText)
@@ -256,14 +246,12 @@ function WordList(props: {words: word[], domain: string, reloadFunc?:() => void}
     );
 }
 
-export function Words(props: {url: string}){
-
-    const {domain} = useParams();
+export function Words(props: {url: string, domain: string}){
 
     return (
         <DataDisplay<word> data_url={props.url} renderFunc={
             (data, reloadFunc) =>{
-                return (<WordList words={data} domain={domain? domain: ""} reloadFunc={reloadFunc}/>);
+                return (<WordList words={data} domain={props.domain} reloadFunc={reloadFunc}/>);
             }
         } />
     );
