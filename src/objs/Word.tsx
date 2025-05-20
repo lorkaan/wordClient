@@ -14,6 +14,8 @@ interface domain_id_response{
 
 function WordList(props: {words: word[], domain: string, reloadFunc?:() => void}){
 
+    const navigate = useNavigate()
+
     const [errorText, setErrorText] = useState("");
     const [editMode, setEditMode] = useState(false);
     const [newWordText, setNewWordText] = useState("");
@@ -216,9 +218,22 @@ function WordList(props: {words: word[], domain: string, reloadFunc?:() => void}
         }
     }
 
+    function logout(e: React.MouseEvent){
+        doFetch<auth_interface>({
+            url: "/logout",
+            method: "POST"
+        }).then((data: auth_interface | void)=>{
+            if(data == null || !data.auth){
+                navigate("/");
+            }else{
+                setErrorText("Log Out Failed");
+            }
+        })
+    }
+
     return (
         <div>
-            <Button className="logoutButton">Log Out</Button>
+            <Button className="logoutButton" onClick={logout}>Log Out</Button>
             {errorText.length > 0? <p className="error">{errorText}</p> : <></>}
             <h3>Words</h3>
             <Button onClick={makeNewRow} variant="contained">Add Word</Button>
