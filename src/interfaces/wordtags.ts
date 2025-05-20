@@ -17,6 +17,14 @@ export interface word extends identifiableText{
 
 // ----- Response Interfaces -----
 
-export interface create_response{
+export interface create_update_response{
+    id?: string | number;
     name: string | string[];
 }
+
+export interface delete_response{
+    status?: string;
+    message?: string;
+    error?: string;
+}
+

@@ -1,4 +1,4 @@
-import { create_response, tag } from "../interfaces/wordtags";
+import { create_update_response, tag } from "../interfaces/wordtags";
 import { GenericDataGrid } from "../generics/GenericDataGrid";
 import { GridColDef } from "@mui/x-data-grid";
 import { DataDisplay } from "../generics/DataDisplay";
@@ -29,23 +29,42 @@ function TagList(props: {tags: tag[], reloadFunc?: ()=> void}){
     }
 
     function addTag(text: string){
-        doFetch<create_response>({
+        doFetch<create_update_response>({
             url: "/api/tags",
             method: "POST",
             data: {"text": text}
-        }).then((resp: create_response | void)=>{
-            if(props.reloadFunc){
-                props.reloadFunc();
+        }).then((resp: create_update_response | void)=>{
+            if(resp){
+                if(resp.id){
+                    if(props.reloadFunc){
+                        props.reloadFunc();
+                    }
+                }else{
+                    setErrorText("Create Failed: " + resp.name)
+                }
+            }else{
+                setErrorText("Network Error: Unable to create tag: " + text)
             }
         }).catch((err) =>{
             setErrorText(err);
         });
     }
 
+    function close(){
+        toggleEditMode(); 
+        if(newTagText.length > 0){
+            addTag(newTagText); 
+        }
+        setNewTagText("")
+    }
+
     const colDefs: GridColDef[] = [
         {
             field: "text",
-            headerName: "Tag"
+            headerName: "Tag",
+            align: "center", 
+            headerAlign: "center", 
+            width: 100,
         },
     ];
 
@@ -54,12 +73,14 @@ function TagList(props: {tags: tag[], reloadFunc?: ()=> void}){
             {errorText.length > 0? <p className="error">{errorText}</p> : <></>}
             <h3>Tags</h3>
             <button onClick={toggleEditMode}>Add Tag</button>
-            <Dialog open={editMode} onClose={() => {toggleEditMode(); addTag(newTagText); setNewTagText("")}}>
-                <input 
-                    value={newTagText} 
-                    onChange={e => setNewTagText(e.target.value)}
-                    placeholder="New Tag"
-                />
+            <Dialog maxWidth="md" open={editMode} onClose={close}>
+                <form onSubmit={close}>
+                    <input 
+                        value={newTagText} 
+                        onChange={e => setNewTagText(e.target.value)}
+                        placeholder="New Tag"
+                    />
+                </form>
             </Dialog>
             <GenericDataGrid<tag> columns={colDefs} data={props.tags} />
         </div>
