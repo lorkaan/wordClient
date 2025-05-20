@@ -119,7 +119,7 @@ function WordList(props: {words: word[], reloadFunc?:() => void}){
             headerAlign: "center", 
             width: 500,
             renderCell: (params) => {
-                return (<TextField onClick={updateRow}>{params.row.details}</TextField>)
+                return (<p className="wordDetails" onClick={updateRow}>{params.row.details}</p>)
             }
         },
         {
