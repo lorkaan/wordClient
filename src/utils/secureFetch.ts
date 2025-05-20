@@ -54,7 +54,7 @@ export function doFetch<T>(request: RequestData, transformFunc?: (jsonObj: Recor
         })
         .then(function (response) {
             if (response) {
-                if (!response.ok || response.status != 200) {
+                if (request.method != "DELETE" && (!response.ok || response.status != 200)) {
                     throw new Error("Issue with sending from " + response.url + "   Status:" + response.status);
                 }
                 return response.json(); // Assumes JSON Response
