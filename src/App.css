@@ -68,3 +68,16 @@
 #loginSubmitButton{
   margin-left: 80%;
 }
+
+.modal{
+  margin-top: 20%;
+}
+
+.modal form{
+  background-color: white;
+  padding:15%;
+}
+
+.modal input{
+  margin-left: 35%;
+}

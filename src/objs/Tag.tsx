@@ -82,7 +82,7 @@ function TagList(props: {tags: tag[], reloadFunc?: ()=> void}){
             {errorText.length > 0? <p className="error">{errorText}</p> : <></>}
             <h3>Tags</h3>
             <button onClick={toggleEditMode}>Add Tag</button>
-            <Modal onKeyUp={dialogKeyUpHandler} open={editMode} onClose={close}>
+            <Modal className="modal" onKeyUp={dialogKeyUpHandler} open={editMode} onClose={close}>
                 <form onSubmit={close}>
                     <input 
                         value={newTagText} 

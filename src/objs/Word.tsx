@@ -148,7 +148,7 @@ function WordList(props: {words: word[], reloadFunc?:() => void}){
             {errorText.length > 0? <p className="error">{errorText}</p> : <></>}
             <h3>Words</h3>
             <button onClick={makeNewRow}>Add Word</button>
-            <Modal onKeyUp={dialogKeyUpHandler} open={editMode} onClose={close}>
+            <Modal className="modal" onKeyUp={dialogKeyUpHandler} open={editMode} onClose={close}>
                 <Box>
                     <form onSubmit={close}>
                         <label className="formLabel">Word:</label><input 
