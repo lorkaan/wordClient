@@ -77,7 +77,7 @@ export function LoginForm(props: {login_url: string, domain: string}){
                     required
                 />
                 <br/>
-                <Button size="medium" id="loginSubmitButton" type="submit" variant="contained">Login</Button>
+                <Button size="small" id="loginSubmitButton" type="submit" variant="contained">Login</Button>
                 {error && <p className="error">{error}</p>}
             </form>
         </div>
