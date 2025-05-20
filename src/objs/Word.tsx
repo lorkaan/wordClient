@@ -119,7 +119,7 @@ function WordList(props: {words: word[], reloadFunc?:() => void}){
             headerAlign: "center", 
             width: 500,
             renderCell: (params) => {
-                return (<p className="wordDetails" onClick={updateRow}>{params.row.details}</p>)
+                return (<p className="wordDetails" onClick={(event: React.MouseEvent) =>{updateRow(params.row)}}>{params.row.details}</p>)
             }
         },
         {
