@@ -7,6 +7,7 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { Tags } from './objs/Tag';
 import { Words } from './objs/Word';
 import LoginForm from './forms/LoginForm';
+import './App.css';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
