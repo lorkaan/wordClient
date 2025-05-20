@@ -24,6 +24,8 @@ function WordList(props: {words: word[], reloadFunc?:() => void}){
     const [newWordText, setNewWordText] = useState("");
     const [newWordDetails, setNewWordDetails] = useState("");
     const [wordId, setWordId] = useState(-1);
+    const [tagId, setTagId] = useState(-1);
+    const [tagText, setTagText] = useState("");
 
     function toggleEditMode(){
         setEditMode(!editMode);
@@ -33,7 +35,7 @@ function WordList(props: {words: word[], reloadFunc?:() => void}){
         doFetch<create_update_response>({
             url: wordId > 0? "/api/words/" + wordId + "/": "/api/words/",
             method: wordId > 0? "PUT": "POST",
-            data: {"text": newWordText, "details": newWordDetails}
+            data: {"text": newWordText, "details": newWordDetails, "tag_id": tagId}
         }).then((resp: create_update_response | void)=>{
             if(resp){
                 if(resp.id){
@@ -94,11 +96,9 @@ function WordList(props: {words: word[], reloadFunc?:() => void}){
     }
 
     function updateRow(row: any){
-        console.log(row.id);
-        console.log(row.text);
-        console.log(row.details);
-        console.log(row);
         setWordId(row.id);
+        setTagId(row.tag.id);
+        setTagText(row.tag.text);
         setNewWordText(row.text);
         setNewWordDetails(row.details);
         toggleEditMode();
@@ -111,6 +111,9 @@ function WordList(props: {words: word[], reloadFunc?:() => void}){
             align: "center", 
             headerAlign: "center", 
             width: 100,
+            renderCell: (params) =>{
+                return (<label>{params.row.tag.text}</label>);
+            }
         },
         {
             field: "text",
@@ -158,6 +161,11 @@ function WordList(props: {words: word[], reloadFunc?:() => void}){
             <Modal className="modal" onKeyUp={dialogKeyUpHandler} open={editMode} onClose={close}>
                 <Box>
                     <form onSubmit={close}>
+                    <label className="formLabel">Tag:</label><input disabled={tagId > 0? true: false}
+                            value={tagText} 
+                            onChange={e => setNewWordText(e.target.value)}
+                            placeholder="New Tag"
+                        /><br/>
                         <label className="formLabel">Word:</label><input disabled={wordId > 0? true: false}
                             value={newWordText} 
                             onChange={e => setNewWordText(e.target.value)}
