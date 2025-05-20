@@ -31,7 +31,7 @@ function WordList(props: {words: word[], domain: string, reloadFunc?:() => void}
     function getDomainIdIfNeeded(): Promise<number | undefined>{
         if(domainId <= 0){
             return doFetch<domain_id_response>({
-                url: "get_domain_id/",
+                url: "get_domain_id",
                 method: "POST",
                 data: {"domain": props.domain}
             }).then((resp: domain_id_response | void) =>{

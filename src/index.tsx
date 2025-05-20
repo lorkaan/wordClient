@@ -21,10 +21,11 @@ const router = createBrowserRouter([
     path: "/",
     element: <LoginForm login_url="login" domain={domain}/>
   },
+  /* Depreciated as Words does it though a single interface since tags should not exist without words to save space and words cant exist without tags
   {
     path: "/tags",
     element: <Tags url="api/tags" />
-  },
+  },*/
   {
     path: "/words",
     element: <Words url="api/words" domain={domain}/>

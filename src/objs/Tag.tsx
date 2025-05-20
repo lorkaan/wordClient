@@ -6,6 +6,8 @@ import { useState } from "react";
 import { Dialog, Modal } from "@mui/material";
 import { doFetch } from "../utils/secureFetch";
 
+// Whole file depreciated since Word provides all the interaction
+
 const tag_url: string = "";
 
 function Tag(props: tag){

@@ -2,7 +2,7 @@ import React from 'react';
 import { CompositionElemData, RenderFunction } from '../interfaces/generics';
 import { Action } from '../interfaces/actionState';
 
-// Possibly Depreciated
+// Depreciated in favour for DataGrid
 export function Listable<T, A, V>(props: {elems: T[], renderFunc: RenderFunction<T, A, V>, editFunc?: React.Dispatch<Action<A, CompositionElemData<V>>>}){
     return (
         <ul>
