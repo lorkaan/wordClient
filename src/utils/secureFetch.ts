@@ -33,7 +33,7 @@ function createGetURL(request: RequestData){
  * @returns                 {Promise}       A Promise containing the interface T specified
  */
 export function doFetch<T>(request: RequestData, transformFunc?: (jsonObj: Record<any, any>) => T): Promise<void | T>{
-    if(request.method in ["POST", "PUT", "DELETE"]){
+    if(request.method == "POST" || request.method == "PUT" || request.method == "DELETE"){ // These are the general methods restful APIs use. I left out Patch cause this system does not use Patch
         return getCsrfToken()
         .then(function(csrf_token){
             if(typeof(csrf_token) == 'string'){
