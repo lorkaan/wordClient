@@ -163,7 +163,7 @@ function WordList(props: {words: word[], reloadFunc?:() => void}){
                     <form onSubmit={close}>
                     <label className="formLabel">Tag:</label><input disabled={tagId > 0? true: false}
                             value={tagText} 
-                            onChange={e => setNewWordText(e.target.value)}
+                            onChange={e => setTagText(e.target.value)}
                             placeholder="New Tag"
                         /><br/>
                         <label className="formLabel">Word:</label><input disabled={wordId > 0? true: false}
