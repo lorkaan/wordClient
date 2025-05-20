@@ -31,26 +31,57 @@ function WordList(props: {words: word[], reloadFunc?:() => void}){
         setEditMode(!editMode);
     }
 
-    function addWord(newWordText: string, newWordDetails: string){
-        doFetch<create_update_response>({
-            url: wordId > 0? "/api/words/" + wordId + "/": "/api/words/",
-            method: wordId > 0? "PUT": "POST",
-            data: {"text": newWordText, "details": newWordDetails, "tag_id": tagId}
-        }).then((resp: create_update_response | void)=>{
-            if(resp){
-                if(resp.id){
-                    if(props.reloadFunc){
-                        props.reloadFunc();
+    function addTagIfNeeded(): Promise<number | undefined>{
+        if(tagId <= 0){
+            return doFetch<create_update_response>({
+                url: "/api/tags/",
+                method: "POST",
+                data: {"text": tagText}
+            }).then((resp: create_update_response | void) =>{
+                if(resp){
+                    if(resp.id){
+                        if(typeof(resp.id) == 'string'){
+                            return Number.parseInt(resp.id);
+                        }else{
+                            return resp.id;
+                        }
+                    }else{
+                        setErrorText("Create Failed: " + resp.name)
                     }
                 }else{
-                    setErrorText("Create Failed: " + resp.name)
+                    setErrorText("Network Error: Unable to create tag: " + tagText)
                 }
-            }else{
-                setErrorText("Network Error: Unable to create word: " + newWordText)
+            });
+        }else{
+            return new Promise(resolve => resolve(tagId));
+        }
+    }
+
+    function addWord(newWordText: string, newWordDetails: string){
+        addTagIfNeeded().then((tag_id: number | undefined) =>{
+            if(tag_id == undefined){
+                throw new TypeError("There is no tag for: " + newWordText);
             }
-        }).catch((err) =>{
-            setErrorText(err);
-        });
+            doFetch<create_update_response>({
+                url: wordId > 0? "/api/words/" + wordId + "/": "/api/words/",
+                method: wordId > 0? "PUT": "POST",
+                data: {"text": newWordText, "details": newWordDetails, "tag_id": tag_id}
+            }).then((resp: create_update_response | void)=>{
+                if(resp){
+                    if(resp.id){
+                        if(props.reloadFunc){
+                            props.reloadFunc();
+                        }
+                    }else{
+                        setErrorText("Create Failed: " + resp.name)
+                    }
+                }else{
+                    setErrorText("Network Error: Unable to create word: " + newWordText)
+                }
+            }).catch((err) =>{
+                setErrorText(err);
+            });
+        })
     }
 
     function close(){
