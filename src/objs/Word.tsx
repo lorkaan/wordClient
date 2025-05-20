@@ -295,7 +295,7 @@ function WordList(props: {words: word[], domain: string, reloadFunc?:() => void}
                     </form>
                 </Box>
             </Modal>
-            <Modal className="modal" onKeyUp={syncDialogKeyUpHandler} open={syncMode} onClose={close}>
+            <Modal className="modal" onKeyUp={syncDialogKeyUpHandler} open={syncMode} onClose={()=> {setUsername(""); setPassword("");}}>
                 <div className="loginDiv">
                     <form className="loginForm" onSubmit={()=>{performSync(); setUsername(""); setPassword("")}}>
                         <label className="formLabel">Username:</label><input 
