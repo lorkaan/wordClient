@@ -51,3 +51,20 @@
 .wordDetails{
   cursor:grab;
 }
+
+.loginForm{
+  border: 1px solid black;
+  box-shadow: 1px 1px 10px 1px blue;
+  width:fit-content;
+  height: fit-content;
+  padding: 10px;
+}
+
+.loginDiv{
+  margin-left: 25%;
+  margin-top: 20px;
+}
+
+#loginSubmitButton{
+  margin-left: 80%;
+}

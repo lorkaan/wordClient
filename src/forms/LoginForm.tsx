@@ -58,25 +58,27 @@ function LoginForm(props: {login_url: string}){
     }
 
     return (
-        <form onSubmit={handleLogin}>
-            <label className="formLabel">Username:</label><input 
-                value={username} 
-                onChange={e => setUsername(e.target.value)}
-                placeholder="Username"
-                required
-            />
-            <br/>
-            <label className="formLabel">Password:</label><input
-                type="password"
-                value={password}
-                onChange={e => setPassword(e.target.value)}
-                placeholder="Password"
-                required
-            />
-            <br/>
-            <button type="submit">Login</button>
-            {error && <p className="error">{error}</p>}
-        </form>
+        <div className="loginDiv">
+            <form className="loginForm" onSubmit={handleLogin}>
+                <label className="formLabel">Username:</label><input 
+                    value={username} 
+                    onChange={e => setUsername(e.target.value)}
+                    placeholder="Username"
+                    required
+                />
+                <br/>
+                <label className="formLabel">Password:</label><input
+                    type="password"
+                    value={password}
+                    onChange={e => setPassword(e.target.value)}
+                    placeholder="Password"
+                    required
+                />
+                <br/>
+                <button id="loginSubmitButton" type="submit">Login</button>
+                {error && <p className="error">{error}</p>}
+            </form>
+        </div>
     );
 }
 

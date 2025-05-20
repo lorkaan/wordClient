@@ -156,8 +156,8 @@ function WordList(props: {words: word[], reloadFunc?:() => void}){
                         placeholder="New Word"
                     /><br/>
                     <label className="formLabel">Details:</label><textarea 
-                        value={newWordText} 
-                        onChange={e => setNewWordText(e.target.value)}
+                        value={newWordDetails} 
+                        onChange={e => setNewWordDetails(e.target.value)}
                         placeholder="New Word"
                     />
                 </form>
