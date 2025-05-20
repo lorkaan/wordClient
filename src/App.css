@@ -70,14 +70,13 @@
 }
 
 .modal{
-  margin-top: 20%;
+  margin-top: 5%;
+  margin-right: 25%;
+  margin-left: 25%;
 }
 
 .modal form{
   background-color: white;
-  padding:15%;
-}
-
-.modal input{
-  margin-left: 35%;
+  padding:5%;
+  margin: 4%;
 }
