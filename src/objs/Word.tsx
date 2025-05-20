@@ -143,23 +143,12 @@ function WordList(props: {words: word[], domain: string, reloadFunc?:() => void}
             url: "/api/words/" + row.id + "/",
             method: "DELETE"
         }).then((resp: delete_response | void)=>{
-            if(resp){
-                if(resp.status && resp.status.length > 0 && resp.message && resp.message.length >= 0){
-                    // All good
-                    if(props.reloadFunc){
-                        props.reloadFunc();
-                    }
-                }else if(resp.error && resp.error.length > 0){
-                    setErrorText("Delete Failed: " + resp.error)
-                }else{
-                    let msg: string = "Unknown Response:\n";
-                    for( const [k, v] of Object.entries(resp)){
-                        msg += "\t" + k + " : " + v + "\n"
-                    }
-                    setErrorText(msg)
-                }
+            if(resp && resp.error && resp.error.length > 0){
+                setErrorText("Delete Failed: " + resp.error)
             }else{
-                setErrorText("Network Error: Unable to create word: " + newWordText)
+                if(props.reloadFunc){
+                    props.reloadFunc();
+                }
             }
         }).catch((err) =>{
             setErrorText(err);
