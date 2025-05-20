@@ -75,6 +75,13 @@ function TagList(props: {tags: tag[], reloadFunc?: ()=> void}){
             headerAlign: "center", 
             width: 100,
         },
+        {
+            field: "word",
+            headerName: "Word",
+            align: "center",
+            headerAlign: "center",
+            width: 100
+        }
     ];
 
     return (

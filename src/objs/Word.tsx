@@ -31,7 +31,7 @@ function WordList(props: {words: word[], reloadFunc?:() => void}){
 
     function addWord(newWordText: string, newWordDetails: string){
         doFetch<create_update_response>({
-            url: wordId > 0? "/api/words/" + wordId: "/api/words/",
+            url: wordId > 0? "/api/words/" + wordId + "/": "/api/words/",
             method: wordId > 0? "PUT": "POST",
             data: {"text": newWordText, "details": newWordDetails}
         }).then((resp: create_update_response | void)=>{
@@ -62,7 +62,7 @@ function WordList(props: {words: word[], reloadFunc?:() => void}){
 
     function removeWord(row: any){
         doFetch<delete_response>({
-            url: "/api/words/" + row.id,
+            url: "/api/words/" + row.id + "/",
             method: "DELETE"
         }).then((resp: delete_response | void)=>{
             if(resp){
@@ -105,6 +105,13 @@ function WordList(props: {words: word[], reloadFunc?:() => void}){
     }
 
     const colDefs: GridColDef[] = [
+        {
+            field: "tag",
+            headerName: "Tag",
+            align: "center", 
+            headerAlign: "center", 
+            width: 100,
+        },
         {
             field: "text",
             headerName: "Word",
@@ -151,7 +158,7 @@ function WordList(props: {words: word[], reloadFunc?:() => void}){
             <Modal className="modal" onKeyUp={dialogKeyUpHandler} open={editMode} onClose={close}>
                 <Box>
                     <form onSubmit={close}>
-                        <label className="formLabel">Word:</label><input 
+                        <label className="formLabel">Word:</label><input disabled={wordId > 0? true: false}
                             value={newWordText} 
                             onChange={e => setNewWordText(e.target.value)}
                             placeholder="New Word"

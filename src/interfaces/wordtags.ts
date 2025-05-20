@@ -7,13 +7,15 @@ export interface identifiableText extends identifiable{
     text: string;
 }
 
-export interface tag extends identifiableText{
-
-}
 
 export interface word extends identifiableText{
     details?: string;
 }
+
+export interface tag extends identifiableText{
+    words?: word[];
+}
+
 
 // ----- Response Interfaces -----
 
