@@ -1,11 +1,11 @@
 import './App.css';
 import LoginForm from './forms/LoginForm';
 
-function App(props: {domain: string}) {
+function App() {
 
   return (
     <div>
-      <LoginForm login_url="login" domain={props.domain}/>
+      
     </div>
   );
 }
